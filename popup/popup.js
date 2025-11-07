@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const fields = [
-    "name", "firstName", "lastName", "gender", "dob",
+    "firstName", "lastName", "gender", "dob",
     "email", "phone", "address", "city", "state", "zip",
     "company", "role", "linkedin", "github", "shortBio"
   ];

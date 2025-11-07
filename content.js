@@ -25,6 +25,26 @@
     return input.placeholder ? input.placeholder.trim() : "";
   }
 
+  // Add this helper function for gender matching
+function matchGenderOption(optionText, gender) {
+  const text = optionText.toLowerCase().trim();
+  const genderValue = gender.toLowerCase().trim();
+
+  // Direct matches
+  if (text === genderValue) return true;
+  
+  // Common variations for "Male"
+  if (genderValue === "male" && ["m", "man", "male"].includes(text)) return true;
+  
+  // Common variations for "Female"
+  if (genderValue === "female" && ["f", "woman", "female"].includes(text)) return true;
+  
+  // Common variations for Other
+  if (genderValue === "other" && ["other", "others", "prefer not to say", "non-binary", "not specified", "Not willing to disclose"].includes(text)) return true;
+
+  return false;
+}
+
   // Detect long-answer (textarea) fields
   function isLongAnswerField(el) {
     if (el.tagName === "TEXTAREA") return true;
@@ -48,8 +68,9 @@
     const h = attrs.replace(/[^a-z0-9\s]/g, " ");
 
     if (/\bemail\b|e[-\s]?mail/.test(h)) return profile.email || "";
-    if (/\b(first|full|given).*name|name\b/.test(h)) return profile.firstName || profile.name || "";
+    if (/\bfirst.*name/.test(h)) return profile.firstName || "";
     if (/\blast.*name/.test(h)) return profile.lastName || "";
+    if (/\bfull.*name|name\b/.test(h)) return `${profile.firstName || ""} ${profile.lastName || ""}`.trim() || "";
     if (/\bphone\b|mobile|tel|contact/.test(h)) return profile.phone || "";
     if (/\baddress|street|location/.test(h)) return profile.address || "";
     if (/\bcity|town/.test(h)) return profile.city || "";
@@ -75,7 +96,7 @@
   function fillSelect(el, value) {
     if (!value) return false;
     const val = value.toLowerCase();
-
+    
     // Try to match by value attribute
     for (const opt of el.options) {
       if (opt.value && opt.value.toLowerCase() === val) {
@@ -85,14 +106,34 @@
       }
     }
 
-    // Try to match by text content
-    for (const opt of el.options) {
-      if (opt.text && opt.text.toLowerCase().includes(val)) {
-        el.value = opt.value;
-        triggerEvents(el);
-        return true;
+    if (el.name?.toLowerCase().includes('gender') || 
+      el.id?.toLowerCase().includes('gender') ||
+      getLabelText(el).toLowerCase().includes('gender')) {
+    
+      for (const opt of el.options) {
+        if (matchGenderOption(opt.text, value) || matchGenderOption(opt.value, value)) {
+          el.value = opt.value;
+          triggerEvents(el);
+          return true;
+        }
       }
     }
+    // Regular dropdown handling for non-gender fields
+  for (const opt of el.options) {
+    if (opt.value && opt.value.toLowerCase() === val) {
+      el.value = opt.value;
+      triggerEvents(el);
+      return true;
+    }
+  }
+
+  for (const opt of el.options) {
+    if (opt.text && opt.text.toLowerCase().includes(val)) {
+      el.value = opt.value;
+      triggerEvents(el);
+      return true;
+    }
+  }
 
     return false;
   }
