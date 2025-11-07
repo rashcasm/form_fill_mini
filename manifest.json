@@ -20,6 +20,7 @@
   ],
   "action": {
     "default_popup": "popup/popup.html",
+    "options_page": "popup/window.html",
     "default_title": "Smart Autofill"
   },
   "background": {

@@ -64,3 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.getElementById("resumeBtn").addEventListener("click", () => {
+  chrome.windows.create({
+    url: "popup/window.html",
+    type: "popup",
+    width: 500,
+    height: 600
+  });
+});
