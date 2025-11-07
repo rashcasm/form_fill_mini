@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Smart Autofill (Basic)",
-  "description": "Simple autofill extension — store a small profile and autofill common form fields.",
-  "version": "0.1.0",
+  "description": "Auto-fill forms on any website using your saved profile.",
+  "version": "0.2.0",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -14,6 +14,10 @@
     "scripting",
     "tabs"
   ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "Smart Autofill"
@@ -23,10 +27,9 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["http://*/*", "https://*/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
-  ],
-  "host_permissions": ["<all_urls>"]
+  ]
 }
