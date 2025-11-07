@@ -11,25 +11,31 @@
     <h1>Smart Autofill</h1>
 
     <form id="profile-form">
-      <label>
-        Name
-        <input id="name" type="text" placeholder="Full name" />
-      </label>
+      <h2>Personal</h2>
+      <label>Full Name<input id="name" type="text" placeholder="John Doe" /></label>
+      <label>First Name<input id="firstName" type="text" placeholder="John" /></label>
+      <label>Last Name<input id="lastName" type="text" placeholder="Doe" /></label>
+      <label>Gender<input id="gender" type="text" placeholder="Male/Female/Other" /></label>
+      <label>Date of Birth<input id="dob" type="date" /></label>
 
-      <label>
-        Email
-        <input id="email" type="email" placeholder="you@example.com" />
-      </label>
+      <h2>Contact</h2>
+      <label>Email<input id="email" type="email" placeholder="you@example.com" /></label>
+      <label>Phone<input id="phone" type="tel" placeholder="+91 98765 43210" /></label>
+      <label>Address<textarea id="address" rows="2" placeholder="Street, Locality"></textarea></label>
+      <label>City<input id="city" type="text" placeholder="Pune" /></label>
+      <label>State<input id="state" type="text" placeholder="Maharashtra" /></label>
+      <label>Zip Code<input id="zip" type="text" placeholder="411001" /></label>
 
-      <label>
-        Phone
-        <input id="phone" type="tel" placeholder="+91 98765 43210" />
-      </label>
+      <h2>Professional</h2>
+      <label>Company<input id="company" type="text" placeholder="Company Name" /></label>
+      <label>Role / Title<input id="role" type="text" placeholder="Software Engineer" /></label>
 
-      <label>
-        Short bio
-        <textarea id="shortBio" rows="3" placeholder="A short bio that can be used as fallback"></textarea>
-      </label>
+      <h2>Online</h2>
+      <label>LinkedIn<input id="linkedin" type="text" placeholder="linkedin.com/in/..." /></label>
+      <label>GitHub<input id="github" type="text" placeholder="github.com/..." /></label>
+
+      <h2>About</h2>
+      <label>Short Bio<textarea id="shortBio" rows="3" placeholder="A short intro..."></textarea></label>
 
       <div class="row">
         <button id="saveBtn" type="button">Save Profile</button>
@@ -42,9 +48,7 @@
       <span id="status" class="status"></span>
     </div>
 
-    <footer>
-      <small>Stored locally in your browser.</small>
-    </footer>
+    <footer><small>Stored locally in your browser.</small></footer>
   </div>
 
   <script src="popup.js"></script>

@@ -1,66 +1,66 @@
-// popup.js - handles saving profile and sending fill message to the active tab
+document.addEventListener("DOMContentLoaded", () => {
+  const fields = [
+    "name", "firstName", "lastName", "gender", "dob",
+    "email", "phone", "address", "city", "state", "zip",
+    "company", "role", "linkedin", "github", "shortBio"
+  ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const nameEl = document.getElementById('name');
-  const emailEl = document.getElementById('email');
-  const phoneEl = document.getElementById('phone');
-  const shortBioEl = document.getElementById('shortBio');
+  const saveBtn = document.getElementById("saveBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const fillBtn = document.getElementById("fillBtn");
+  const statusEl = document.getElementById("status");
 
-  const saveBtn = document.getElementById('saveBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const fillBtn = document.getElementById('fillBtn');
-  const statusEl = document.getElementById('status');
-
-  // Load saved profile
-  chrome.storage.local.get(['smartAutofillProfile'], (res) => {
+  // Load saved data
+  chrome.storage.local.get(["smartAutofillProfile"], (res) => {
     const p = res.smartAutofillProfile || {};
-    nameEl.value = p.name || '';
-    emailEl.value = p.email || '';
-    phoneEl.value = p.phone || '';
-    shortBioEl.value = p.shortBio || '';
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && p[id] !== undefined) el.value = p[id];
+    });
   });
 
   // Save profile
-  saveBtn.addEventListener('click', () => {
-    const profile = {
-      name: nameEl.value.trim(),
-      email: emailEl.value.trim(),
-      phone: phoneEl.value.trim(),
-      shortBio: shortBioEl.value.trim()
-    };
+  saveBtn.addEventListener("click", () => {
+    const profile = {};
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) profile[id] = el.value.trim();
+    });
     chrome.storage.local.set({ smartAutofillProfile: profile }, () => {
-      statusEl.textContent = 'Saved ✔';
-      setTimeout(() => (statusEl.textContent = ''), 1500);
+      statusEl.textContent = "Saved ✔";
+      setTimeout(() => (statusEl.textContent = ""), 1500);
     });
   });
 
-  // Clear stored profile
-  clearBtn.addEventListener('click', () => {
-    if (!confirm('Clear saved profile from this browser?')) return;
-    chrome.storage.local.remove('smartAutofillProfile', () => {
-      nameEl.value = emailEl.value = phoneEl.value = shortBioEl.value = '';
-      statusEl.textContent = 'Cleared';
-      setTimeout(() => (statusEl.textContent = ''), 1200);
+  // Clear all
+  clearBtn.addEventListener("click", () => {
+    if (!confirm("Clear your saved profile?")) return;
+    chrome.storage.local.remove("smartAutofillProfile", () => {
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      statusEl.textContent = "Cleared";
+      setTimeout(() => (statusEl.textContent = ""), 1200);
     });
   });
 
-  // Send fill command to active tab
-  fillBtn.addEventListener('click', async () => {
-    statusEl.textContent = 'Sending fill request...';
-    // Get active tab
+  // Fill current page
+  fillBtn.addEventListener("click", async () => {
+    statusEl.textContent = "Filling...";
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || !tab.id) {
-      statusEl.textContent = 'No active tab';
+      statusEl.textContent = "No active tab";
       return;
     }
-    chrome.tabs.sendMessage(tab.id, { type: 'FILL_FORM' }, (response) => {
+
+    chrome.tabs.sendMessage(tab.id, { type: "FILL_FORM" }, (response) => {
       if (chrome.runtime.lastError) {
-        // no content script on page or other error
-        statusEl.textContent = 'Page not ready (or extension not allowed on this site)';
+        statusEl.textContent = "Page not ready (or not allowed)";
         return;
       }
-      statusEl.textContent = `Done (filled: ${response && response.filled ? response.filled : 0})`;
-      setTimeout(() => (statusEl.textContent = ''), 1800);
+      statusEl.textContent = `Done (filled: ${response?.filled || 0})`;
+      setTimeout(() => (statusEl.textContent = ""), 2000);
     });
   });
 });
