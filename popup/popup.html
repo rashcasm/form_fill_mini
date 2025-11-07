@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Autofill</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Smart Autofill</h1>
+
+    <form id="profile-form">
+      <label>
+        Name
+        <input id="name" type="text" placeholder="Full name" />
+      </label>
+
+      <label>
+        Email
+        <input id="email" type="email" placeholder="you@example.com" />
+      </label>
+
+      <label>
+        Phone
+        <input id="phone" type="tel" placeholder="+91 98765 43210" />
+      </label>
+
+      <label>
+        Short bio
+        <textarea id="shortBio" rows="3" placeholder="A short bio that can be used as fallback"></textarea>
+      </label>
+
+      <div class="row">
+        <button id="saveBtn" type="button">Save Profile</button>
+        <button id="clearBtn" type="button" class="ghost">Clear</button>
+      </div>
+    </form>
+
+    <div class="row actions">
+      <button id="fillBtn" type="button">Fill Form on Page</button>
+      <span id="status" class="status"></span>
+    </div>
+
+    <footer>
+      <small>Stored locally in your browser.</small>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

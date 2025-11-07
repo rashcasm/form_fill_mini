@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SmartAutofill Test Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding:20px; max-width:800px; }
+    label { display:block; margin:10px 0 4px; }
+    input, textarea, select { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <h2>Sample Test Form</h2>
+
+  <form>
+    <label for="fullName">Full name</label>
+    <input id="fullName" name="fullname" placeholder="Full name"/>
+
+    <label for="email">Email address</label>
+    <input id="email" name="email" placeholder="you@example.com" />
+
+    <label for="phone">Phone</label>
+    <input id="phone" name="phone" placeholder="+91 98765 43210" />
+
+    <label for="company">Company</label>
+    <input id="company" name="company" placeholder="Company" />
+
+    <label for="about">Tell us about yourself</label>
+    <textarea id="about" name="about" rows="6" placeholder="Why do you want to join?"></textarea>
+
+    <label for="city">City</label>
+    <input id="city" name="city" placeholder="City" />
+
+    <div style="margin-top:12px;">
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+
+  <p>Use the extension's popup: Save a profile, then click "Fill Form on Page".</p>
+</body>
+</html>
