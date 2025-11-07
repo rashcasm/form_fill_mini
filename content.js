@@ -44,7 +44,6 @@ function matchGenderOption(optionText, gender) {
 
   return false;
 }
-
   // Detect long-answer (textarea) fields
   function isLongAnswerField(el) {
     if (el.tagName === "TEXTAREA") return true;
