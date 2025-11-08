@@ -174,7 +174,7 @@
     for (const el of all) {
       const mapped = mapValueToElement(el, profile);
 
-      // 🧠 Handle long-answer fields using AI
+      // Handle long-answer fields using AI
       if (isLongAnswerField(el) && (!el.value || el.value.trim() === "")) {
         const question = getLabelText(el) || el.placeholder || "Write a professional answer";
         const profileText = JSON.stringify(profile, null, 2);

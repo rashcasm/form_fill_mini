@@ -1,5 +1,5 @@
 // ⚠️ Hardcode your OpenRouter API key here
-const OPENROUTER_API_KEY = "___"; // <-- replace this
+const OPENROUTER_API_KEY = "___"; 
 
 // ✅ Use your preferred OSS model (stable)
 const MODEL = "openai/gpt-oss-20b:free";
