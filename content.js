@@ -1,5 +1,3 @@
-// content.js — Universal Autofill (now with dropdown + DOB support)
-
 (function () {
   console.log("[Smart Autofill] Content script loaded ✅");
 
@@ -26,30 +24,28 @@
   }
 
   // Add this helper function for gender matching
-function matchGenderOption(optionText, gender) {
-  const text = optionText.toLowerCase().trim();
-  const genderValue = gender.toLowerCase().trim();
+  function matchGenderOption(optionText, gender) {
+    const text = optionText.toLowerCase().trim();
+    const genderValue = gender.toLowerCase().trim();
 
-  // Direct matches
-  if (text === genderValue) return true;
-  
-  // Common variations for "Male"
-  if (genderValue === "male" && ["m", "man", "male"].includes(text)) return true;
-  
-  // Common variations for "Female"
-  if (genderValue === "female" && ["f", "woman", "female"].includes(text)) return true;
-  
-  // Common variations for Other
-  if (genderValue === "other" && ["other", "others", "prefer not to say", "non-binary", "not specified", "Not willing to disclose"].includes(text)) return true;
+    if (text === genderValue) return true;
+    if (genderValue === "male" && ["m", "man", "male"].includes(text)) return true;
+    if (genderValue === "female" && ["f", "woman", "female"].includes(text)) return true;
+    if (
+      genderValue === "other" &&
+      ["other", "others", "prefer not to say", "non-binary", "not specified", "not willing to disclose"].includes(text)
+    )
+      return true;
 
-  return false;
-}
+    return false;
+  }
+
   // Detect long-answer (textarea) fields
   function isLongAnswerField(el) {
     if (el.tagName === "TEXTAREA") return true;
     if (el.rows && el.rows > 3) return true;
     const text = (getLabelText(el) + " " + (el.placeholder || "")).toLowerCase();
-    return /(why|about|experience|motivation|describe|summary|cover|statement|bio)/.test(text);
+    return /(why|about|experience|motivation|describe|summary|cover|statement|bio|yourself|comments|details)/.test(text);
   }
 
   // Try to find best-matched value from profile
@@ -69,7 +65,8 @@ function matchGenderOption(optionText, gender) {
     if (/\bemail\b|e[-\s]?mail/.test(h)) return profile.email || "";
     if (/\bfirst.*name/.test(h)) return profile.firstName || "";
     if (/\blast.*name/.test(h)) return profile.lastName || "";
-    if (/\bfull.*name|name\b/.test(h)) return `${profile.firstName || ""} ${profile.lastName || ""}`.trim() || "";
+    if (/\bfull.*name|name\b/.test(h))
+      return `${profile.firstName || ""} ${profile.lastName || ""}`.trim() || "";
     if (/\bphone\b|mobile|tel|contact/.test(h)) return profile.phone || "";
     if (/\baddress|street|location/.test(h)) return profile.address || "";
     if (/\bcity|town/.test(h)) return profile.city || "";
@@ -85,7 +82,7 @@ function matchGenderOption(optionText, gender) {
     // DOB-related dropdowns (day, month, year)
     if (/\b(day|dd)\b/.test(h) && profile.dob) return new Date(profile.dob).getDate().toString();
     if (/\b(month|mm)\b/.test(h) && profile.dob)
-      return new Date(profile.dob).toLocaleString("default", { month: "long" }); // "January"
+      return new Date(profile.dob).toLocaleString("default", { month: "long" });
     if (/\b(year|yyyy)\b/.test(h) && profile.dob) return new Date(profile.dob).getFullYear().toString();
 
     return null;
@@ -95,8 +92,7 @@ function matchGenderOption(optionText, gender) {
   function fillSelect(el, value) {
     if (!value) return false;
     const val = value.toLowerCase();
-    
-    // Try to match by value attribute
+
     for (const opt of el.options) {
       if (opt.value && opt.value.toLowerCase() === val) {
         el.value = opt.value;
@@ -105,10 +101,11 @@ function matchGenderOption(optionText, gender) {
       }
     }
 
-    if (el.name?.toLowerCase().includes('gender') || 
-      el.id?.toLowerCase().includes('gender') ||
-      getLabelText(el).toLowerCase().includes('gender')) {
-    
+    if (
+      el.name?.toLowerCase().includes("gender") ||
+      el.id?.toLowerCase().includes("gender") ||
+      getLabelText(el).toLowerCase().includes("gender")
+    ) {
       for (const opt of el.options) {
         if (matchGenderOption(opt.text, value) || matchGenderOption(opt.value, value)) {
           el.value = opt.value;
@@ -117,22 +114,14 @@ function matchGenderOption(optionText, gender) {
         }
       }
     }
-    // Regular dropdown handling for non-gender fields
-  for (const opt of el.options) {
-    if (opt.value && opt.value.toLowerCase() === val) {
-      el.value = opt.value;
-      triggerEvents(el);
-      return true;
-    }
-  }
 
-  for (const opt of el.options) {
-    if (opt.text && opt.text.toLowerCase().includes(val)) {
-      el.value = opt.value;
-      triggerEvents(el);
-      return true;
+    for (const opt of el.options) {
+      if (opt.text && opt.text.toLowerCase().includes(val)) {
+        el.value = opt.value;
+        triggerEvents(el);
+        return true;
+      }
     }
-  }
 
     return false;
   }
@@ -141,10 +130,8 @@ function matchGenderOption(optionText, gender) {
   function fillElement(el, value) {
     if (!value) return false;
 
-    // Dropdown
     if (el.tagName === "SELECT") return fillSelect(el, value);
 
-    // Normal input or textarea
     if (["INPUT", "TEXTAREA"].includes(el.tagName)) {
       const type = (el.type || "").toLowerCase();
       if (["hidden", "submit", "button", "reset", "file", "password"].includes(type)) return false;
@@ -154,7 +141,6 @@ function matchGenderOption(optionText, gender) {
       return true;
     }
 
-    // Google Forms / contenteditable
     if (el.getAttribute("contenteditable") === "true") {
       el.focus();
       el.textContent = value;
@@ -166,7 +152,16 @@ function matchGenderOption(optionText, gender) {
     return false;
   }
 
-  // Fill all fields
+  //  AI Integration via background.js
+  async function getAIResponse(prompt) {
+    return new Promise((resolve) => {
+      chrome.runtime.sendMessage({ type: "AI_GENERATE", prompt }, (res) => {
+        resolve(res?.result || "⚠️ No response from AI.");
+      });
+    });
+  }
+
+  // Fill all fields (with AI + profile)
   async function fillWithProfile(profile) {
     const all = Array.from(
       document.querySelectorAll(
@@ -178,6 +173,31 @@ function matchGenderOption(optionText, gender) {
 
     for (const el of all) {
       const mapped = mapValueToElement(el, profile);
+
+      // 🧠 Handle long-answer fields using AI
+      if (isLongAnswerField(el) && (!el.value || el.value.trim() === "")) {
+        const question = getLabelText(el) || el.placeholder || "Write a professional answer";
+        const profileText = JSON.stringify(profile, null, 2);
+
+        const prompt = `
+You are a helpful AI assistant writing short, natural, professional answers for form fields.
+Question: "${question}"
+User profile: ${profileText}
+Write a short professional response.`;
+
+        fillElement(el, "⏳ Generating answer with AI...");
+        try {
+          const aiText = await getAIResponse(prompt);
+          fillElement(el, aiText);
+          console.log("🤖 AI filled:", question);
+        } catch (err) {
+          console.error("AI generation failed:", err);
+          fillElement(el, "⚠️ AI generation failed.");
+        }
+        continue;
+      }
+
+      // 🧍 Normal profile-based autofill
       if (!mapped) continue;
       if (fillElement(el, mapped)) filled++;
     }

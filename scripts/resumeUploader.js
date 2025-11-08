@@ -1,5 +1,5 @@
 // resumeUploader.js
-const OCR_API_KEY = ""; // Replace with your real key
+const OCR_API_KEY = "K88172971288957"; // Replace with your real key
 
 document.addEventListener("DOMContentLoaded", () => {
   const uploadBtn = document.getElementById("uploadBtn");
