@@ -4,7 +4,7 @@
   // Fire events so frameworks detect value changes
   function triggerEvents(el) {
     ["input", "change", "blur"].forEach((evt) =>
-      el.dispatchEvent(new Event(evt, { bubbles: true })),
+      el.dispatchEvent(new Event(evt, { bubbles: true }))
     );
   }
 
@@ -12,14 +12,11 @@
   function getLabelText(input) {
     if (!input) return "";
     if (input.id) {
-      const label = document.querySelector(
-        `label[for="${CSS.escape(input.id)}"]`,
-      );
+      const label = document.querySelector(`label[for="${CSS.escape(input.id)}"]`);
       if (label && label.textContent) return label.textContent.trim();
     }
     const parentLabel = input.closest("label");
-    if (parentLabel && parentLabel.textContent)
-      return parentLabel.textContent.trim();
+    if (parentLabel && parentLabel.textContent) return parentLabel.textContent.trim();
     const prev = input.previousElementSibling;
     if (prev && ["LABEL", "DIV", "SPAN", "P", "STRONG"].includes(prev.tagName))
       return prev.textContent.trim();
@@ -32,20 +29,11 @@
     const genderValue = gender.toLowerCase().trim();
 
     if (text === genderValue) return true;
-    if (genderValue === "male" && ["m", "man", "male"].includes(text))
-      return true;
-    if (genderValue === "female" && ["f", "woman", "female"].includes(text))
-      return true;
+    if (genderValue === "male" && ["m", "man", "male"].includes(text)) return true;
+    if (genderValue === "female" && ["f", "woman", "female"].includes(text)) return true;
     if (
       genderValue === "other" &&
-      [
-        "other",
-        "others",
-        "prefer not to say",
-        "non-binary",
-        "not specified",
-        "not willing to disclose",
-      ].includes(text)
+      ["other", "others", "prefer not to say", "non-binary", "not specified", "not willing to disclose"].includes(text)
     )
       return true;
 
@@ -56,14 +44,8 @@
   function isLongAnswerField(el) {
     if (el.tagName === "TEXTAREA") return true;
     if (el.rows && el.rows > 3) return true;
-    const text = (
-      getLabelText(el) +
-      " " +
-      (el.placeholder || "")
-    ).toLowerCase();
-    return /(why|about|experience|motivation|describe|summary|cover|statement|bio|yourself|comments|details)/.test(
-      text,
-    );
+    const text = (getLabelText(el) + " " + (el.placeholder || "")).toLowerCase();
+    return /(why|about|experience|motivation|describe|summary|cover|statement|bio|yourself|comments|details)/.test(text);
   }
 
   // Try to find best-matched value from profile
@@ -84,16 +66,13 @@
     if (/\bfirst.*name/.test(h)) return profile.firstName || "";
     if (/\blast.*name/.test(h)) return profile.lastName || "";
     if (/\bfull.*name|name\b/.test(h))
-      return (
-        `${profile.firstName || ""} ${profile.lastName || ""}`.trim() || ""
-      );
+      return `${profile.firstName || ""} ${profile.lastName || ""}`.trim() || "";
     if (/\bphone\b|mobile|tel|contact/.test(h)) return profile.phone || "";
     if (/\baddress|street|location/.test(h)) return profile.address || "";
     if (/\bcity|town/.test(h)) return profile.city || "";
     if (/\bstate|region|province/.test(h)) return profile.state || "";
     if (/\bzip|postal|pincode/.test(h)) return profile.zip || "";
-    if (/\bcompany|organization|organisation|employer/.test(h))
-      return profile.company || "";
+    if (/\bcompany|organization|organisation|employer/.test(h)) return profile.company || "";
     if (/\brole|position|title|job/.test(h)) return profile.role || "";
     if (/\blinkedin/.test(h)) return profile.linkedin || "";
     if (/\bgithub|portfolio|website/.test(h)) return profile.github || "";
@@ -101,12 +80,10 @@
     if (/\bbio|about|summary|motivation/.test(h)) return profile.shortBio || "";
 
     // DOB-related dropdowns (day, month, year)
-    if (/\b(day|dd)\b/.test(h) && profile.dob)
-      return new Date(profile.dob).getDate().toString();
+    if (/\b(day|dd)\b/.test(h) && profile.dob) return new Date(profile.dob).getDate().toString();
     if (/\b(month|mm)\b/.test(h) && profile.dob)
       return new Date(profile.dob).toLocaleString("default", { month: "long" });
-    if (/\b(year|yyyy)\b/.test(h) && profile.dob)
-      return new Date(profile.dob).getFullYear().toString();
+    if (/\b(year|yyyy)\b/.test(h) && profile.dob) return new Date(profile.dob).getFullYear().toString();
 
     return null;
   }
@@ -130,10 +107,7 @@
       getLabelText(el).toLowerCase().includes("gender")
     ) {
       for (const opt of el.options) {
-        if (
-          matchGenderOption(opt.text, value) ||
-          matchGenderOption(opt.value, value)
-        ) {
+        if (matchGenderOption(opt.text, value) || matchGenderOption(opt.value, value)) {
           el.value = opt.value;
           triggerEvents(el);
           return true;
@@ -160,12 +134,7 @@
 
     if (["INPUT", "TEXTAREA"].includes(el.tagName)) {
       const type = (el.type || "").toLowerCase();
-      if (
-        ["hidden", "submit", "button", "reset", "file", "password"].includes(
-          type,
-        )
-      )
-        return false;
+      if (["hidden", "submit", "button", "reset", "file", "password"].includes(type)) return false;
       el.focus();
       el.value = value;
       triggerEvents(el);
@@ -196,8 +165,8 @@
   async function fillWithProfile(profile) {
     const all = Array.from(
       document.querySelectorAll(
-        'input, textarea, select, [contenteditable="true"][role="textbox"], [aria-label][contenteditable="true"]',
-      ),
+        'input, textarea, select, [contenteditable="true"][role="textbox"], [aria-label][contenteditable="true"]'
+      )
     );
 
     let filled = 0;
@@ -207,8 +176,7 @@
 
       // Handle long-answer fields using AI
       if (isLongAnswerField(el) && (!el.value || el.value.trim() === "")) {
-        const question =
-          getLabelText(el) || el.placeholder || "Write a professional answer";
+        const question = getLabelText(el) || el.placeholder || "Write a professional answer";
         const profileText = JSON.stringify(profile, null, 2);
 
         const prompt = `
