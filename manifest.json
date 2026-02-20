@@ -22,7 +22,7 @@
   },
   "options_page": "popup/window.html",
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["config.js", "background.js"]
   },
   "content_scripts": [
     {

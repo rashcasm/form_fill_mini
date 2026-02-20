@@ -1,8 +1,7 @@
-// ⚠️ Hardcode your OpenRouter API key here
-const OPENROUTER_API_KEY = "__";
-
-// ✅ Use your preferred OSS model (stable)
-const MODEL = "openai/gpt-oss-20b:free";
+// API keys and model are loaded from config.js (which is gitignored).
+// See config.example.js for the template.
+const OPENROUTER_API_KEY = CONFIG.OPENROUTER_API_KEY;
+const MODEL = CONFIG.OPENROUTER_MODEL;
 
 async function generateAIResponse(prompt) {
   try {

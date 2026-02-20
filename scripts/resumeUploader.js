@@ -1,5 +1,7 @@
 // resumeUploader.js
-const OCR_API_KEY = "___"; // Replace with your real key
+// API key is loaded from config.js (which is gitignored).
+// See config.example.js for the template.
+const OCR_API_KEY = CONFIG.OCR_API_KEY;
 
 document.addEventListener("DOMContentLoaded", () => {
   const uploadBtn = document.getElementById("uploadBtn");
