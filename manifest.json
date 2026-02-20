@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Autofill (Basic)",
+  "description": "Auto-fill forms on any website using your saved profile.",
+  "version": "0.2.0",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "smart-autofill@quill.ai",
+      "strict_min_version": "109.0"
+    }
+  },
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Smart Autofill"
+  },
+  "options_page": "popup/window.html",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Upload Resume</title>
+        <link rel="stylesheet" href="popup.css" />
+        <style>
+            html,
+            body {
+                width: 100%;
+                min-height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Extract Details from Resume</h1>
+            <p>
+                Upload a PDF resume, and we'll extract your information
+                automatically.
+            </p>
+
+            <input type="file" id="resumeFile" accept="application/pdf" />
+            <button id="uploadBtn">Upload & Extract</button>
+            <p id="status"></p>
+
+            <div id="preview" class="hidden">
+                <h3>Extracted Data:</h3>
+                <pre id="output"></pre>
+                <button id="saveBtn">Save to Profile</button>
+            </div>
+
+            <footer><small>Uses OCR.Space API (free tier).</small></footer>
+        </div>
+
+        <script src="../scripts/resumeUploader.js"></script>
+    </body>
+</html>

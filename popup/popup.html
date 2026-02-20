@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quill.ai</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <!--<img src="..icons/icon48.png" alt="Logo" class="logo" /> -->
+      <h1>Quill.ai</h1>
+    </header>
+
+    <main class="content">
+      <button id="resumeBtn" type="button" class="ai-btn">Extract from Resume</button>
+
+      <section>
+        <h2>Personal</h2>
+        <div class="field-grid">
+          <label>First Name<input id="firstName" type="text" placeholder="John" /></label>
+          <label>Last Name<input id="lastName" type="text" placeholder="Doe" /></label>
+          <label>Gender<input id="gender" type="text" placeholder="Male/Female/Other" /></label>
+          <label>Date of Birth<input id="dob" type="date" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <div class="field-grid">
+          <label>Email<input id="email" type="email" placeholder="you@example.com" /></label>
+          <label>Phone<input id="phone" type="tel" placeholder="+91 98765 43210" /></label>
+          <label>Address<textarea id="address" rows="2" placeholder="Street, Locality"></textarea></label>
+          <label>City<input id="city" type="text" placeholder="Pune" /></label>
+          <label>State<input id="state" type="text" placeholder="Maharashtra" /></label>
+          <label>Zip Code<input id="zip" type="text" placeholder="411001" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Professional</h2>
+        <div class="field-grid">
+          <label>Company<input id="company" type="text" placeholder="Company Name" /></label>
+          <label>Role / Title<input id="role" type="text" placeholder="Software Engineer" /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Online</h2>
+        <div class="field-grid">
+          <label>LinkedIn<input id="linkedin" type="text" placeholder="linkedin.com/in/..." /></label>
+          <label>GitHub<input id="github" type="text" placeholder="github.com/..." /></label>
+        </div>
+      </section>
+
+      <section>
+        <h2>About</h2>
+        <label>Short Bio<textarea id="shortBio" rows="3" placeholder="A short intro..."></textarea></label>
+      </section>
+
+      <div class="button-row">
+        <button id="saveBtn" type="button" class="primary">Save</button>
+        <button id="clearBtn" type="button" class="secondary">Clear</button>
+      </div>
+
+      <div class="button-row">
+        <button id="fillBtn" type="button" class="accent"> Autofill Form</button>
+        <span id="status" class="status"></span>
+      </div>
+    </main>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
